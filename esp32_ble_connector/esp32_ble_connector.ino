@@ -53,7 +53,7 @@ void setup() {
   BLEDevice::init(BLE_DEVICE_NAME);
   //create BLE server
   pServer = BLEDevice::createServer();
-  pServer->setCallbacks(new KUBTServerCallbacks()); //pServerにCallback関数を設定
+  pServer->setCallbacks(new KUBTServerCallbacks()); //pServerにCallback関数を設定（->はアロー演算子）
   BLEService *pService = pServer->createService(SERVICE_UUID); //pServerにserviceuuidを設定
   /*
   create BLE characteristics
@@ -66,9 +66,9 @@ void setup() {
     CHARACTERISTIC_UUID,
     BLECharacteristic::PROPERTY_NOTIFY
   );
-  pCharacteristic -> addDescriptor(new BLE2902());
+  pCharacteristic -> addDescriptor(new BLE2902()); // -> はC++のアロー演算子（ポインタのメンバアクセス）
   //start BLE service
-  pService -> start();
+  pService -> start(); // -> はポインタを通してメンバ関数を呼び出すアロー演算子
   // start advertising
   BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
   // add properties
@@ -98,8 +98,8 @@ void sendData(){
     };
     //約500msおきにデータを送信する処理
     while(oldNotifyTime+500 > millis()){}//待機処理
-    pCharacteristic->setValue((uint8_t*)&sensorDataArray, 10);
-    pCharacteristic->notify(); //send data to phone
+    pCharacteristic->setValue((uint8_t*)&sensorDataArray, 10); // ->でポインタのメンバ関数にアクセス
+    pCharacteristic->notify(); //send data to phone（->はアロー演算子）
     oldNotifyTime = millis();
   }
 }
